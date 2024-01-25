@@ -10,6 +10,7 @@
 		73022F2E2B22F5AD00972959 /* CFABaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73022F2D2B22F5AD00972959 /* CFABaseController.swift */; };
 		73022F312B23316700972959 /* FactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73022F302B23316700972959 /* FactsTableViewCell.swift */; };
 		73022F332B235C2600972959 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73022F322B235C2500972959 /* Presenter.swift */; };
+		7333771C2B62DEF2000A0511 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7333771B2B62DEF2000A0511 /* SnapKit */; };
 		736CDEA32B26F13B0037BA84 /* SingleFactEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736CDEA22B26F13B0037BA84 /* SingleFactEditingViewController.swift */; };
 		736CDEA52B27490D0037BA84 /* CFABaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736CDEA42B27490D0037BA84 /* CFABaseButton.swift */; };
 		737904C32B25E8C7001389C5 /* SingleFactShowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737904C22B25E8C7001389C5 /* SingleFactShowingViewController.swift */; };
@@ -96,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7333771C2B62DEF2000A0511 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,6 +301,9 @@
 			dependencies = (
 			);
 			name = CatFactsApp;
+			packageProductDependencies = (
+				7333771B2B62DEF2000A0511 /* SnapKit */,
+			);
 			productName = CatFactsApp;
 			productReference = 73826F752B20948200A26E00 /* CatFactsApp.app */;
 			productType = "com.apple.product-type.application";
@@ -371,6 +376,9 @@
 				Base,
 			);
 			mainGroup = 73826F6C2B20948200A26E00;
+			packageReferences = (
+				7333771A2B62DEF2000A0511 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 73826F762B20948200A26E00 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -607,7 +615,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 692Q2SBZF4;
+				DEVELOPMENT_TEAM = K3MH22V3Y9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatFactsApp/SupportingFiles/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -635,7 +643,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 692Q2SBZF4;
+				DEVELOPMENT_TEAM = K3MH22V3Y9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CatFactsApp/SupportingFiles/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -768,6 +776,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7333771A2B62DEF2000A0511 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7333771B2B62DEF2000A0511 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7333771A2B62DEF2000A0511 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		7398B6702B32D0EA00089EBD /* Model.xcdatamodeld */ = {

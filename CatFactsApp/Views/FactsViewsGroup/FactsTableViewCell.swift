@@ -8,6 +8,7 @@
 // TODO: Добавить стрелочки перехода по ячейке
 
 import UIKit
+import SnapKit
 
 final class FactsTableViewCell: UITableViewCell {
     
@@ -31,7 +32,7 @@ final class FactsTableViewCell: UITableViewCell {
 extension FactsTableViewCell {
     func configureAppearance() {
         
-//        customCFAAppearance()
+        //        customCFAAppearance()
         backgroundColor = Resources.Colors.element
         
         label.numberOfLines = 1
@@ -41,18 +42,21 @@ extension FactsTableViewCell {
     }
     
     func addSubviews() {
-        setupSubview(label)
-        setupSubview(image)
+        setupSubviews(label)
+        setupSubviews(image)
     }
     
     func constraintViews() {
-        NSLayoutConstraint.activate([
-            label.centerYAnchor.constraint(equalTo: centerYAnchor),
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Resources.designValue),
-            label.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7),
-            
-            image.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-            image.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Resources.designValue)
-        ])
+        
+        label.snp.makeConstraints { make in
+            make.centerY.equalTo(snp.centerY)
+            make.leading.equalTo(snp.leading).offset(Resources.designValue)
+            make.width.equalTo(snp.width).multipliedBy(0.7)
+        }
+        
+        image.snp.makeConstraints { make in
+            make.centerY.equalTo(label.snp.centerY)
+            make.trailing.equalTo(snp.trailing).offset(-Resources.designValue)
+        }
     }
 }

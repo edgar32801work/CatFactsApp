@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class CFABaseButton: UIButton {
     private let label = UILabel()
@@ -52,16 +53,15 @@ extension CFABaseButton {
     
     func addSubviews() {
         
-        setupSubview(label)
+        setupSubviews(label)
     }
     
     func constraintViews() {
         
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Resources.designValue),
-            label.topAnchor.constraint(equalTo: topAnchor),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Resources.designValue),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-    }
-}
+        label.snp.makeConstraints { make in
+            make.leading.equalTo(snp.leading).offset(Resources.designValue)
+            make.top.equalTo(snp.top)
+            make.trailing.equalTo(snp.trailing).offset(-Resources.designValue)
+            make.bottom.equalTo(snp.bottom)
+        }
+    }}

@@ -7,6 +7,7 @@
 // TODO: - разобраться подробнее с реализацией смещения клавиатурой
 
 import UIKit
+import SnapKit
 
 final class SingleFactEditingViewController: CFABaseController {
     
@@ -111,7 +112,7 @@ extension SingleFactEditingViewController {
         textView.layer.borderColor = Resources.Colors.separator.cgColor
         textView.layer.borderWidth = 0.5
         textView.layer.cornerRadius = Resources.designValue
-        textView.contentInset = UIEdgeInsets(top: 0, left: Resources.designValue, bottom: 0, right: -Resources.designValue)
+//        textView.contentInset = UIEdgeInsets(top: 0, left: Resources.designValue, bottom: 0, right: 0)
         textView.clipsToBounds = true
         
         saveButton.configure(withTitle: Resources.Strings.Facts.Buttons.saveButton)
@@ -122,37 +123,35 @@ extension SingleFactEditingViewController {
     override func addSubviews() {
         super.addSubviews()
         
-        view.setupSubview(scrollView)
-        scrollView.setupSubview(imageButton)
-        scrollView.setupSubview(textView)
-        scrollView.setupSubview(saveButton)
+        view.setupSubviews(scrollView)
+        scrollView.setupSubviews(imageButton)
+        scrollView.setupSubviews(textView)
+        scrollView.setupSubviews(saveButton)
     }
     
     override func constraintViews() {
         super.constraintViews()
         
-        let dynamicConstraint = textView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -60)
-        dynamicConstraint.isActive = true
-
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            imageButton.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 40),
-            imageButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17),
-            imageButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -17),
-            imageButton.heightAnchor.constraint(equalTo: imageButton.widthAnchor),
-
-            textView.topAnchor.constraint(equalTo: imageButton.bottomAnchor, constant: 20),
-            textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17),
-            textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -17),
-            dynamicConstraint,
-            
-            saveButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            
-        ])
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        imageButton.snp.makeConstraints { make in
+            make.top.equalTo(scrollView.snp.top).offset(40)
+            make.leading.equalTo(view.snp.leading).offset(17)
+            make.trailing.equalTo(view.snp.trailing).offset(-17)
+            make.height.equalTo(imageButton.snp.width)
+        }
+        
+        textView.snp.makeConstraints { make in
+            make.top.equalTo(imageButton.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(17)
+            make.bottom.equalTo(saveButton.snp.top).offset(-60)
+        }
+        
+        saveButton.snp.makeConstraints { make in
+            make.centerX.equalTo(scrollView.snp.centerX)
+        }
     }
 }
 

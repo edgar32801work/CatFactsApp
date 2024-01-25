@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol SettingsViewPresentationDelegate {
     var currentProposedFactsAmount: Int { get }
@@ -47,17 +48,13 @@ extension SettingsViewController {
     }
     
     override func addSubviews() {
-        view.setupSubview(collectionView)
+        view.setupSubviews(collectionView)
     }
     
     override func constraintViews() {
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            
-        ])
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 }
 

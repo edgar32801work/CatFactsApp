@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SingleFactShowingViewController: CFABaseController {
     
@@ -41,7 +42,7 @@ extension SingleFactShowingViewController {
         
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-        
+                
         labelBackgroundView.backgroundColor = Resources.Colors.element
         labelBackgroundView.layer.borderColor = Resources.Colors.separator.cgColor
         labelBackgroundView.layer.borderWidth = 0.5
@@ -58,41 +59,41 @@ extension SingleFactShowingViewController {
     override func addSubviews() {
         super.addSubviews()
         
-        labelBackgroundView.setupSubview(label)
+        labelBackgroundView.setupSubviews(label)
         
-        view.setupSubview(scrollView)
+        view.setupSubviews(scrollView)
         
-        scrollView.setupSubview(imageView)
-        scrollView.setupSubview(labelBackgroundView)
-        scrollView.setupSubview(closeButton)
+        scrollView.setupSubviews(imageView)
+        scrollView.setupSubviews(labelBackgroundView)
+        scrollView.setupSubviews(closeButton)
     }
     
     override func constraintViews() {
         super.constraintViews()
-
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 40),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17),
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -17),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
-
-            labelBackgroundView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
-            labelBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17),
-            labelBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -17),
-            
-            label.trailingAnchor.constraint(equalTo: labelBackgroundView.trailingAnchor, constant: -6),
-            label.topAnchor.constraint(equalTo: labelBackgroundView.topAnchor, constant: 6),
-            label.leadingAnchor.constraint(equalTo: labelBackgroundView.leadingAnchor, constant: 6),
-            label.bottomAnchor.constraint(equalTo: labelBackgroundView.bottomAnchor, constant: -6),
-
-            closeButton.topAnchor.constraint(equalTo: labelBackgroundView.bottomAnchor, constant: 60),
-            closeButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            
-        ])
+        
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        imageView.snp.makeConstraints { make in
+            make.top.equalTo(scrollView.snp.top).offset(40)
+            make.leading.equalTo(view.snp.leading).offset(17)
+            make.trailing.equalTo(view.snp.trailing).offset(-17)
+            make.height.equalTo(imageView.snp.width)
+        }
+        
+        labelBackgroundView.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(view.snp.horizontalEdges).inset(17)
+        }
+        
+        label.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(6)
+        }
+        
+        closeButton.snp.makeConstraints { make in
+            make.top.equalTo(labelBackgroundView.snp.bottom).offset(60)
+            make.centerX.equalTo(scrollView.snp.centerX)
+        }
     }
 }

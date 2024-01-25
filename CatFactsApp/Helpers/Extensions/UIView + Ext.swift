@@ -14,9 +14,10 @@ extension UIView {
         self.addSubview(separatorView)
     }
     
-    func setupSubview(_ view: UIView) {
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(view)
+    func setupSubviews(_ views: UIView...) {
+        views.forEach { view in
+            self.addSubview(view)
+        }
     }
     
     func customCFAAppearance() {

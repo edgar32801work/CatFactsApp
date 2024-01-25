@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol FactsViewPresentationDelegate: AnyObject {
     func getRandomFactsCount() -> Int
@@ -140,25 +141,27 @@ extension FactsViewController {
     override func addSubviews() {
         super.addSubviews()
         
-        view.setupSubview(segmentedControl)
-        view.setupSubview(tableView)
+        view.setupSubviews(segmentedControl)
+        view.setupSubviews(tableView)
     }
     
     override func constraintViews() {
         super.constraintViews()
         
-        NSLayoutConstraint.activate([
-            segmentedControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
-            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Resources.designValue),
-            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Resources.designValue),
-            
-            tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        segmentedControl.snp.makeConstraints { make in
+            make.top.equalTo(view.snp.top).offset(8)
+            make.leading.equalTo(view.snp.leading).offset(Resources.designValue)
+            make.trailing.equalTo(view.snp.trailing).offset(-Resources.designValue)
+        }
+        
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(segmentedControl.snp.bottom)
+            make.leading.equalTo(view.snp.leading).offset(4)
+            make.trailing.equalTo(view.snp.trailing).offset(-4)
+            make.bottom.equalTo(view.snp.bottom)
+        }
     }
-    
+
 }
 
 // MARK: - SECTIONS & CELLS

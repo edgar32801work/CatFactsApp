@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SettingsCollectionViewCell: UICollectionViewCell {
     
@@ -78,22 +79,23 @@ extension SettingsCollectionViewCell {
     
     func addSubviews(withSecondView secondView: UIView) {
 
-        setupSubview(title)
-        setupSubview(secondView)
+        setupSubviews(title)
+        setupSubviews(secondView)
     }
     
     func constraintViews(withSecondView secondView: UIView) {
         
-        NSLayoutConstraint.activate([
-            title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Resources.designValue),
-            title.topAnchor.constraint(equalTo: topAnchor),
-            title.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
-            secondView.leadingAnchor.constraint(equalTo: title.trailingAnchor),
-            secondView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Resources.designValue),
-            secondView.centerYAnchor.constraint(equalTo: title.centerYAnchor),
-            secondView.heightAnchor.constraint(equalTo: title.heightAnchor, multiplier: 0.9)
-        ])
+        title.snp.makeConstraints { make in
+            make.leading.equalTo(snp.leading).offset(Resources.designValue)
+            make.top.bottom.equalToSuperview()
+        }
+        
+        secondView.snp.makeConstraints { make in
+            make.leading.equalTo(title.snp.trailing)
+            make.trailing.equalTo(snp.trailing).offset(-Resources.designValue)
+            make.centerY.equalTo(title.snp.centerY)
+            make.height.equalTo(title.snp.height).multipliedBy(0.9)
+        }
     }
 }
 
