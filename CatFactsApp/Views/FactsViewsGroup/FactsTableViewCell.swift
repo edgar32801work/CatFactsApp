@@ -11,6 +11,8 @@ import UIKit
 
 final class FactsTableViewCell: UITableViewCell {
     
+    static let id = "FactsTableViewCell"
+    
     private let label = UILabel()
     private let image = UIImageView()
     func configure(withTitle title: String?) {
@@ -30,10 +32,12 @@ extension FactsTableViewCell {
     func configureAppearance() {
         
 //        customCFAAppearance()
+        backgroundColor = Resources.Colors.element
         
         label.numberOfLines = 1
         
         image.image = UIImage(systemName: "chevron.right")
+        image.tintColor = Resources.Colors.tintColor
     }
     
     func addSubviews() {

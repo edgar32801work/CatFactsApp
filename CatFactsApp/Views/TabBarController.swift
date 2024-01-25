@@ -24,6 +24,7 @@ extension TabBarController {
         
         tabBar.addSeparator(x: 0, y: 0, width: view.bounds.width, height: 0.5)
         tabBar.backgroundColor = Resources.Colors.Bars.background
+        tabBar.tintColor = Resources.Colors.tintColor
         
         factsViewController.tabBarItem = UITabBarItem(title: Resources.Strings.factsTitle,
                                                       image: Resources.Images.TabBar.factsIcon,
@@ -32,7 +33,6 @@ extension TabBarController {
                                                          image: Resources.Images.TabBar.settingsIcon,
                                                          tag: 1)
         setViewControllers([factsViewController, settingsViewController], animated: true)
-        
     }
 }
 

@@ -11,6 +11,7 @@ import CoreData
 
 final class Presenter {
 
+    
 }
 
 extension Presenter: FactsViewPresentationDelegate {
@@ -18,7 +19,7 @@ extension Presenter: FactsViewPresentationDelegate {
     // MARK: - RANDOM FACTS
         
     func getRandomFactsCount() -> Int {
-        Resources.Settings.proposedFactsAmount
+        MTUserDefaults.shared.proposedFactsAmount
     }
     
     func getRandomFact(forRow i: Int) async -> (String?, UIImage?) {
@@ -45,6 +46,10 @@ extension Presenter: FactsViewPresentationDelegate {
         return (text, image)
     }
     
+    func updateAllRandomFacts() {
+        ModelManager.shared.proposedFacts.removeAll()
+    }
+    
     // MARK: - USER FACTS
     
     func getUserFactsCount() -> Int {
@@ -54,14 +59,11 @@ extension Presenter: FactsViewPresentationDelegate {
     func getUserFact(forRow i: Int) -> (String?, UIImage?) {
         let fact = ModelManager.shared.userFacts[i]
         let text = fact.text
-        if let image = fact.image {
-            return (text, UIImage(data: image))
-        }
-        return (text, Resources.Images.imageErr)
+        let image = fact.getImage()
+        return (text, image)
     }
     
     func updateUserFact(atRow i: Int, withText text: String?, image: UIImage?) {
-        
         ModelManager.shared.updateFact(id: i, text: text, image: image)
     }
     
@@ -74,10 +76,9 @@ extension Presenter: FactsViewPresentationDelegate {
     func getSavedFact(forRow i: Int) -> (String?, UIImage?) {
         let fact = ModelManager.shared.savedFacts[i]
         let text = fact.text
-        if let image = fact.image {
-            return (text, UIImage(data: image))
-        }
-        return (text, Resources.Images.imageErr)
+        let image = fact.getImage()
+        return (text, image)
+        
     }
     
     // MARK: - ADDICTION & REMOVING
@@ -100,5 +101,67 @@ extension Presenter: FactsViewPresentationDelegate {
             ModelManager.shared.deleteFact(factType: .savedFact, id: i)
         default: return
         }
+    }
+}
+
+extension Presenter: SettingsViewPresentationDelegate {
+    
+    enum SettingsCases: Int, CaseIterable {
+        
+        case proposedFactsAmount, appTheme, language
+    }
+     
+    enum Theme: Int {
+        case light, dark, device
+        
+        func getUserInterfaceStyle() -> UIUserInterfaceStyle {
+            switch self {
+                
+            case .light:
+                return .light
+            case .dark:
+                return .dark
+            case .device:
+                return .unspecified
+            }
+        }
+        
+        mutating func switchValue() {
+            switch self {
+            case .light:
+                self = .dark
+            case .dark:
+                self = .device
+            case .device:
+                self = .light
+            }
+        }
+    }
+    
+    var currentProposedFactsAmount: Int {
+        MTUserDefaults.shared.proposedFactsAmount
+    }
+    
+    func updateProposedFactsAmount(withNewValue newValue: Int) {
+        MTUserDefaults.shared.proposedFactsAmount = newValue
+    }
+    
+    var currentThemeTitle: String {
+        
+        switch MTUserDefaults.shared.theme {
+        case .light:
+            return Resources.Strings.Settings.ThemeCases.light
+            
+        case .dark:
+            return Resources.Strings.Settings.ThemeCases.dark
+            
+        case .device:
+            return Resources.Strings.Settings.ThemeCases.device
+        }
+    }
+    
+    func switchTheme(windowForUpdating: UIWindow?) {
+        MTUserDefaults.shared.theme.switchValue()
+        windowForUpdating?.overrideUserInterfaceStyle = MTUserDefaults.shared.theme.getUserInterfaceStyle()
     }
 }

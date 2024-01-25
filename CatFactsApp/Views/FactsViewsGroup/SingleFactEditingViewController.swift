@@ -108,6 +108,8 @@ extension SingleFactEditingViewController {
         imageButton.subviews.first?.contentMode = .scaleAspectFit
         
         textView.backgroundColor = Resources.Colors.element
+        textView.layer.borderColor = Resources.Colors.separator.cgColor
+        textView.layer.borderWidth = 0.5
         textView.layer.cornerRadius = Resources.designValue
         textView.contentInset = UIEdgeInsets(top: 0, left: Resources.designValue, bottom: 0, right: -Resources.designValue)
         textView.clipsToBounds = true

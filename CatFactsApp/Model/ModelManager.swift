@@ -15,18 +15,21 @@ final class ModelManager {
     
     // MARK: - CORE DATA MANAGEMENT
     
+    let savedFactId = "SavedFact"
+    let userFactId = "UserFact"
+    
     enum FactType {
         case userFact
         case savedFact
     }
     
     var savedFacts: [SavedFact] {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "SavedFact")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: savedFactId)
         return (try? context.fetch(fetchRequest) as? [SavedFact]) ?? []
     }
     
     var userFacts: [UserFact] {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "UserFact")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: userFactId)
         return (try? context.fetch(fetchRequest) as? [UserFact]) ?? []
     }
     
@@ -45,35 +48,25 @@ final class ModelManager {
     
     func createFact(factType table: FactType, text: String?, image: UIImage? = nil) {
         switch table {
+            
         case .savedFact:
-            guard let factEntityDescription = NSEntityDescription.entity(forEntityName: "SavedFact", in: context) else { return }          // TODO: handle errors
+            guard let factEntityDescription = NSEntityDescription.entity(forEntityName: savedFactId, in: context) else { return }          // TODO: handle errors
             let fact = UserFact(entity: factEntityDescription, insertInto: context)
             fact.text = text
-            if let image = image {
-                fact.image = image.pngData()
-            } else {
-                fact.image = Resources.Images.imageErr?.pngData()
-            }
+            fact.saveImage(image)
+            
         case .userFact:
-            guard let factEntityDescription = NSEntityDescription.entity(forEntityName: "UserFact", in: context) else { return }          // TODO: handle errors
+            guard let factEntityDescription = NSEntityDescription.entity(forEntityName: userFactId, in: context) else { return }          // TODO: handle errors
             let fact = UserFact(entity: factEntityDescription, insertInto: context)
             fact.text = text
-            if let image = image {
-                fact.image = image.pngData()
-            } else {
-                fact.image = Resources.Images.imageErr?.pngData()
-            }
+            fact.saveImage(image)
         }
         saveContext()
     }
     
     func updateFact(id: Int, text: String?, image: UIImage? = nil) {
         userFacts[id].text = text
-        if let image = image {
-            userFacts[id].image = image.pngData()
-        } else {
-            userFacts[id].image = Resources.Images.imageErr?.pngData()
-        }
+        userFacts[id].saveImage(image)
         saveContext()
     }
     

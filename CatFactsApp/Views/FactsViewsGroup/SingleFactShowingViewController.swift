@@ -14,17 +14,19 @@ final class SingleFactShowingViewController: CFABaseController {
     private let labelBackgroundView = UIView()
     private let label = UILabel()
     private let closeButton = CFABaseButton()
+
+    @objc func closeScreen() {
+        dismiss(animated: true, completion: nil)
+    }
     
+// MARK: - CONFIGURATION
+
     func configure(withText text: String?,
                    image: UIImage? = Resources.Images.imageErr) {
         label.text = text
         imageView.image = image
     }
-    
-    @objc func closeScreen() {
-        dismiss(animated: true, completion: nil)
-    }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.contentSize = CGSize(width: view.bounds.width, height: closeButton.frame.maxY + 40)
@@ -41,6 +43,8 @@ extension SingleFactShowingViewController {
         scrollView.showsHorizontalScrollIndicator = false
         
         labelBackgroundView.backgroundColor = Resources.Colors.element
+        labelBackgroundView.layer.borderColor = Resources.Colors.separator.cgColor
+        labelBackgroundView.layer.borderWidth = 0.5
         labelBackgroundView.layer.cornerRadius = Resources.designValue
         labelBackgroundView.clipsToBounds = true
         label.numberOfLines = 0

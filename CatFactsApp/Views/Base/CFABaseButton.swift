@@ -43,6 +43,8 @@ extension CFABaseButton {
     func configureAppearance() {
         
         backgroundColor = Resources.Colors.element
+        layer.borderColor = Resources.Colors.separator.cgColor
+        layer.borderWidth = 0.5
         layer.cornerRadius = Resources.designValue
         
         label.textAlignment = .center

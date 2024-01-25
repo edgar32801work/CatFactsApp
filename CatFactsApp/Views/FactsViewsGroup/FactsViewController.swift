@@ -11,6 +11,7 @@ protocol FactsViewPresentationDelegate: AnyObject {
     func getRandomFactsCount() -> Int
     func getRandomFact(forRow i: Int) async -> (String?, UIImage?)
     func updateRandomFact(forRow: Int) async -> (String?, UIImage?)
+    func updateAllRandomFacts()
     
     func getUserFactsCount() -> Int
     func getUserFact(forRow i: Int) -> (String?, UIImage?)
@@ -25,14 +26,14 @@ protocol FactsViewPresentationDelegate: AnyObject {
 
 final class FactsViewController: CFABaseController {
     
-    enum FactsTableType: Int {
-        case proposedFacts, userFacts
+    enum FactsTableType: Int {              // TODO: - Пернести в презентер
+        case proposedFacts, favouritsFacts
         
-        mutating func change() {
+        mutating func switchValue() {
             switch self {
             case .proposedFacts:
-                self = .userFacts
-            case .userFacts:
+                self = .favouritsFacts
+            case .favouritsFacts:
                 self = .proposedFacts
             }
         }
@@ -50,7 +51,7 @@ final class FactsViewController: CFABaseController {
         switch currentFactsTableType {
         case .proposedFacts:
             return .left
-        case .userFacts:
+        case .favouritsFacts:
             return .right
         }
     }
@@ -65,21 +66,39 @@ final class FactsViewController: CFABaseController {
         navigationController?.showDetailViewController(destinationVC, sender: self)
     }
     
-    @objc func segmentedControlAction() {
-        currentFactsTableType.change()
-        updateFactsTable()
-    }
-    
-    @objc func screenSwipeAction() {
-        segmentedControlAction()
+    @objc func changeFactsTableType() {
+        currentFactsTableType.switchValue()
         segmentedControl.selectedSegmentIndex = currentFactsTableType.rawValue
+        updateFactsTable()
         if let gesture = self.view.gestureRecognizers?.first as? UISwipeGestureRecognizer {
             gesture.direction = swipeDirection
         }
     }
-    
+ 
     @objc func updateFactsTable() {
         tableView.reloadData()
+    }
+    
+    @objc func handleRefreshControl() {
+        if currentFactsTableType == .proposedFacts {
+            dataDelegate?.updateAllRandomFacts()
+            updateFactsTable()
+        }
+        DispatchQueue.main.async {
+              self.tableView.refreshControl?.endRefreshing()
+           }
+    }
+    
+    func getRefreshControl() -> UIRefreshControl {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+        return refreshControl
+    }
+    
+    func addScreenSwipeGesture() {
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(changeFactsTableType))
+        swipeGesture.direction = swipeDirection
+        self.view.addGestureRecognizer(swipeGesture)
     }
 
 // MARK: - CONFIGURATION
@@ -89,17 +108,15 @@ final class FactsViewController: CFABaseController {
         
         dataDelegate = Builder.shared.buildPresenter()
         
-        
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(FactsTableViewCell.self, forCellReuseIdentifier: "TableViewCell")
+        tableView.register(FactsTableViewCell.self, forCellReuseIdentifier: FactsTableViewCell.id)
+        tableView.refreshControl = getRefreshControl()
         
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(screenSwipeAction))
-        swipeGesture.direction = swipeDirection
-        self.view.addGestureRecognizer(swipeGesture)
+        addScreenSwipeGesture()
         
         segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.addTarget(self, action: #selector(segmentedControlAction), for: .valueChanged)
+        segmentedControl.addTarget(self, action: #selector(changeFactsTableType), for: .valueChanged)
     }
 }
 
@@ -112,6 +129,7 @@ extension FactsViewController {
         title = Resources.Strings.factsTitle
         
         addNavBarButton()
+        navigationItem.rightBarButtonItem?.tintColor = Resources.Colors.tintColor
         
         tableView.backgroundColor = Resources.Colors.background
         
@@ -153,7 +171,7 @@ extension FactsViewController: UITableViewDataSource {
         switch currentFactsTableType {
         case .proposedFacts:
             return 1
-        case .userFacts:
+        case .favouritsFacts:
             return 2
         }
     }
@@ -164,7 +182,7 @@ extension FactsViewController: UITableViewDataSource {
         switch currentFactsTableType {
         case .proposedFacts:
             return Resources.Strings.Facts.Sections.proposedFacts
-        case .userFacts:
+        case .favouritsFacts:
             switch FactsTableSection(rawValue: section) {
             case .userFacts: return Resources.Strings.Facts.Sections.userFacts
             case .savedFacts: return Resources.Strings.Facts.Sections.savedFacts
@@ -181,7 +199,7 @@ extension FactsViewController: UITableViewDataSource {
         case .proposedFacts:
             let numberOfProposedFacts = dataDelegate?.getRandomFactsCount() ?? 0
             return numberOfProposedFacts
-        case .userFacts:
+        case .favouritsFacts:
             switch FactsTableSection(rawValue: section) {
             case .userFacts:
                 let numberOfUserFacts: Int = dataDelegate?.getUserFactsCount() ?? 0
@@ -198,7 +216,7 @@ extension FactsViewController: UITableViewDataSource {
     
     // CELL FOR ROW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as? FactsTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: FactsTableViewCell.id, for: indexPath) as? FactsTableViewCell else { return UITableViewCell() }
 //        cell.separatorInset = .init(top: 0, left: .greatestFiniteMagnitude, bottom: 0, right: 0)            // TODO: разобраться поддробнее
         cell.layoutMargins = UIEdgeInsets.zero
         cell.preservesSuperviewLayoutMargins = false
@@ -211,7 +229,7 @@ extension FactsViewController: UITableViewDataSource {
                 cell.configure(withTitle: fact?.title)
             }
             return cell
-        case .userFacts:
+        case .favouritsFacts:
             switch FactsTableSection(rawValue: indexPath.section) {
             case .userFacts:
                 let fact: (title: String?, _: UIImage?)? = dataDelegate?.getUserFact(forRow: indexPath.row)
@@ -245,7 +263,7 @@ extension FactsViewController: UITableViewDelegate {
                 destinationVC.configure(withText: fact?.text, image: fact?.image)
                 navigationController?.showDetailViewController(destinationVC, sender: self)
             }
-        case .userFacts:
+        case .favouritsFacts:
             switch FactsTableSection(rawValue: indexPath.section) {
             case .userFacts:
                 let destinationVC = SingleFactShowingViewController()
@@ -285,10 +303,26 @@ extension FactsViewController: UITableViewDelegate {
             let swipeConfiguration = UISwipeActionsConfiguration(actions: [uploadedAction])
             return swipeConfiguration
         
-        case .userFacts:
+        case .favouritsFacts:
             let uploadedAction = UIContextualAction(style: .normal, title: "") { [weak self] action, sourceView, completionHandler in
-                self?.dataDelegate?.removeFact(from: FactsTableSection(rawValue: indexPath.section), atRow: indexPath.row)
-                self?.updateFactsTable()
+                
+                let alert = UIAlertController(title: Resources.Strings.Facts.DeletingAlert.title,
+                                              message: Resources.Strings.Facts.DeletingAlert.message,
+                                              preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: Resources.Strings.Facts.DeletingAlert.deleteAction,
+                                              style: .destructive,
+                                              handler: { [weak self] _ in
+                    self?.dataDelegate?.removeFact(from: FactsTableSection(rawValue: indexPath.section), atRow: indexPath.row)
+                    self?.updateFactsTable()
+                }))
+                
+                alert.addAction(UIAlertAction(title: Resources.Strings.Facts.DeletingAlert.cancelAction,
+                                              style: .default,
+                                              handler: nil))
+                
+                self?.present(alert, animated: true, completion: nil)
+
                 completionHandler(true)
             }
             uploadedAction.backgroundColor = Resources.Colors.Facts.CellSwipes.favouritsTrailing
@@ -316,7 +350,7 @@ extension FactsViewController: UITableViewDelegate {
             let swipeConfiguration = UISwipeActionsConfiguration(actions: [uploadedAction])
             return swipeConfiguration
             
-        case .userFacts:
+        case .favouritsFacts:
             switch FactsTableSection(rawValue: indexPath.section) {
                 
             case .userFacts:
