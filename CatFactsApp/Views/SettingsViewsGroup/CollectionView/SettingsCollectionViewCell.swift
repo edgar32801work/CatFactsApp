@@ -20,7 +20,7 @@ final class SettingsCollectionViewCell: UICollectionViewCell {
     let languagePicker = UIPickerView()
     
     
-    func configure(as cellType: Presenter.SettingsCases, rootVC: SettingsViewController) {
+    func configure(as cellType: MTUserDefaults.SettingsCases, rootVC: SettingsViewController) {
         
         self.rootVC = rootVC
         

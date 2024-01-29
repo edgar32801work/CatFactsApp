@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores { description, error in
             if let error = error {
-                print(error.localizedDescription)
+                debugPrint(error.localizedDescription)
             } else {
                 debugPrint(description.url?.absoluteString as Any)                      // TODO: process error
             }

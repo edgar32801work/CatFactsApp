@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-protocol SettingsViewPresentationDelegate {
+protocol SettingsViewPresenterProtocol {
     var currentProposedFactsAmount: Int { get }
     func updateProposedFactsAmount(withNewValue newValue: Int)
         
@@ -19,7 +19,7 @@ protocol SettingsViewPresentationDelegate {
 final class SettingsViewController: CFABaseController {
     
     private let collectionView = SettingsCollectionView()
-    var dataDelegate: SettingsViewPresentationDelegate?
+    var dataDelegate: SettingsViewPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ final class SettingsViewController: CFABaseController {
         addSubviews()
         constraintViews()
         
-        dataDelegate = Builder.shared.buildPresenter()
+        dataDelegate = SettingsViewPresenter()
         
         title = Resources.Strings.settingsTitle
         
@@ -63,7 +63,7 @@ extension SettingsViewController: UICollectionViewDataSource {
     
     // NUMBER OF ITEMS IN SECTION
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Presenter.SettingsCases.allCases.count
+        return MTUserDefaults.SettingsCases.allCases.count
     }
     
     // CELL FOR ITEM AT
@@ -71,7 +71,7 @@ extension SettingsViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SettingsCollectionViewCell.id, for: indexPath) as? SettingsCollectionViewCell
         else { return SettingsCollectionViewCell() }              // TODO: - приложение упадет
         
-        if let settingCase = Presenter.SettingsCases(rawValue: indexPath.row) {
+        if let settingCase = MTUserDefaults.SettingsCases(rawValue: indexPath.row) {
             cell.configure(as: settingCase, rootVC: self)
         }
         return cell

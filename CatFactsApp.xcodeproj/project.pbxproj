@@ -9,8 +9,12 @@
 /* Begin PBXBuildFile section */
 		73022F2E2B22F5AD00972959 /* CFABaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73022F2D2B22F5AD00972959 /* CFABaseController.swift */; };
 		73022F312B23316700972959 /* FactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73022F302B23316700972959 /* FactsTableViewCell.swift */; };
-		73022F332B235C2600972959 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73022F322B235C2500972959 /* Presenter.swift */; };
 		7333771C2B62DEF2000A0511 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7333771B2B62DEF2000A0511 /* SnapKit */; };
+		7365DF0E2B67D53A0072FA8C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF0D2B67D53A0072FA8C /* CoreDataManager.swift */; };
+		7365DF102B67D54F0072FA8C /* NetDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF0F2B67D54F0072FA8C /* NetDataManager.swift */; };
+		7365DF122B67E1D80072FA8C /* FactsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF112B67E1D80072FA8C /* FactsViewPresenter.swift */; };
+		7365DF152B67E3390072FA8C /* SettingsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF142B67E3390072FA8C /* SettingsViewPresenter.swift */; };
+		7365DF172B67E70C0072FA8C /* SingleFactViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF162B67E70C0072FA8C /* SingleFactViewPresenter.swift */; };
 		736CDEA32B26F13B0037BA84 /* SingleFactEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736CDEA22B26F13B0037BA84 /* SingleFactEditingViewController.swift */; };
 		736CDEA52B27490D0037BA84 /* CFABaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736CDEA42B27490D0037BA84 /* CFABaseButton.swift */; };
 		737904C32B25E8C7001389C5 /* SingleFactShowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737904C22B25E8C7001389C5 /* SingleFactShowingViewController.swift */; };
@@ -26,7 +30,6 @@
 		738548D32B21E96200A32156 /* FactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738548D22B21E96200A32156 /* FactsViewController.swift */; };
 		738548D52B21EB0400A32156 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738548D42B21EB0400A32156 /* SettingsViewController.swift */; };
 		738548DC2B21FB6000A32156 /* Fact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738548DB2B21FB6000A32156 /* Fact.swift */; };
-		738548DF2B2200DF00A32156 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738548DE2B2200DF00A32156 /* ModelManager.swift */; };
 		738548E12B2206C900A32156 /* NavBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738548E02B2206C900A32156 /* NavBarController.swift */; };
 		738548E32B2208A100A32156 /* UIView + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738548E22B2208A100A32156 /* UIView + Ext.swift */; };
 		738E60202B3D6D1500B4DE56 /* MTUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738E601F2B3D6D1500B4DE56 /* MTUserDefaults.swift */; };
@@ -34,7 +37,6 @@
 		73984C282B3C0C250082385E /* SettingsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73984C272B3C0C250082385E /* SettingsCollectionViewCell.swift */; };
 		73984C2A2B3C1B210082385E /* SettingsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73984C292B3C1B210082385E /* SettingsCollectionView.swift */; };
 		7398B6722B32D0EA00089EBD /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7398B6702B32D0EA00089EBD /* Model.xcdatamodeld */; };
-		739D6CC82B24C4C600777BD5 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739D6CC72B24C4C600777BD5 /* Builder.swift */; };
 		73B3EFAD2B35BED90072627B /* UserFact + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B3EFAC2B35BED90072627B /* UserFact + Ext.swift */; };
 		73B3EFAF2B35BEEA0072627B /* SavedFact + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B3EFAE2B35BEEA0072627B /* SavedFact + Ext.swift */; };
 /* End PBXBuildFile section */
@@ -59,7 +61,11 @@
 /* Begin PBXFileReference section */
 		73022F2D2B22F5AD00972959 /* CFABaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFABaseController.swift; sourceTree = "<group>"; };
 		73022F302B23316700972959 /* FactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactsTableViewCell.swift; sourceTree = "<group>"; };
-		73022F322B235C2500972959 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
+		7365DF0D2B67D53A0072FA8C /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		7365DF0F2B67D54F0072FA8C /* NetDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetDataManager.swift; sourceTree = "<group>"; };
+		7365DF112B67E1D80072FA8C /* FactsViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactsViewPresenter.swift; sourceTree = "<group>"; };
+		7365DF142B67E3390072FA8C /* SettingsViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewPresenter.swift; sourceTree = "<group>"; };
+		7365DF162B67E70C0072FA8C /* SingleFactViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFactViewPresenter.swift; sourceTree = "<group>"; };
 		736CDEA22B26F13B0037BA84 /* SingleFactEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFactEditingViewController.swift; sourceTree = "<group>"; };
 		736CDEA42B27490D0037BA84 /* CFABaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFABaseButton.swift; sourceTree = "<group>"; };
 		737904C22B25E8C7001389C5 /* SingleFactShowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFactShowingViewController.swift; sourceTree = "<group>"; };
@@ -79,7 +85,6 @@
 		738548D22B21E96200A32156 /* FactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactsViewController.swift; sourceTree = "<group>"; };
 		738548D42B21EB0400A32156 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		738548DB2B21FB6000A32156 /* Fact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fact.swift; sourceTree = "<group>"; };
-		738548DE2B2200DF00A32156 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		738548E02B2206C900A32156 /* NavBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarController.swift; sourceTree = "<group>"; };
 		738548E22B2208A100A32156 /* UIView + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Ext.swift"; sourceTree = "<group>"; };
 		738E601F2B3D6D1500B4DE56 /* MTUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTUserDefaults.swift; sourceTree = "<group>"; };
@@ -87,7 +92,6 @@
 		73984C272B3C0C250082385E /* SettingsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCollectionViewCell.swift; sourceTree = "<group>"; };
 		73984C292B3C1B210082385E /* SettingsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCollectionView.swift; sourceTree = "<group>"; };
 		7398B6712B32D0EA00089EBD /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		739D6CC72B24C4C600777BD5 /* Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 		73B3EFAC2B35BED90072627B /* UserFact + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserFact + Ext.swift"; sourceTree = "<group>"; };
 		73B3EFAE2B35BEEA0072627B /* SavedFact + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedFact + Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,13 +131,31 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
+		7365DF182B67E8C10072FA8C /* FactsView */ = {
+			isa = PBXGroup;
+			children = (
+				7365DF112B67E1D80072FA8C /* FactsViewPresenter.swift */,
+				738548D22B21E96200A32156 /* FactsViewController.swift */,
+				73022F302B23316700972959 /* FactsTableViewCell.swift */,
+			);
+			path = FactsView;
+			sourceTree = "<group>";
+		};
+		7365DF192B67E8D80072FA8C /* SingleFact */ = {
+			isa = PBXGroup;
+			children = (
+				7365DF162B67E70C0072FA8C /* SingleFactViewPresenter.swift */,
+				736CDEA22B26F13B0037BA84 /* SingleFactEditingViewController.swift */,
+				737904C22B25E8C7001389C5 /* SingleFactShowingViewController.swift */,
+			);
+			path = SingleFact;
+			sourceTree = "<group>";
+		};
 		737904C02B25E82E001389C5 /* FactsViewsGroup */ = {
 			isa = PBXGroup;
 			children = (
-				738548D22B21E96200A32156 /* FactsViewController.swift */,
-				73022F302B23316700972959 /* FactsTableViewCell.swift */,
-				737904C22B25E8C7001389C5 /* SingleFactShowingViewController.swift */,
-				736CDEA22B26F13B0037BA84 /* SingleFactEditingViewController.swift */,
+				7365DF182B67E8C10072FA8C /* FactsView */,
+				7365DF192B67E8D80072FA8C /* SingleFact */,
 			);
 			path = FactsViewsGroup;
 			sourceTree = "<group>";
@@ -141,6 +163,7 @@
 		737904C12B25E851001389C5 /* SettingsViewsGroup */ = {
 			isa = PBXGroup;
 			children = (
+				7365DF142B67E3390072FA8C /* SettingsViewPresenter.swift */,
 				738548D42B21EB0400A32156 /* SettingsViewController.swift */,
 				73984C2B2B3C42990082385E /* CollectionView */,
 			);
@@ -152,7 +175,6 @@
 			children = (
 				737D0E8B2B21CA930081BD68 /* Extensions */,
 				737D0E882B21C91D0081BD68 /* Resources.swift */,
-				739D6CC72B24C4C600777BD5 /* Builder.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -189,7 +211,6 @@
 			isa = PBXGroup;
 			children = (
 				738548DA2B21FA8000A32156 /* Model */,
-				738548D92B21FA7300A32156 /* Presenter */,
 				738548D62B21FA1600A32156 /* Views */,
 				737D0E8A2B21C92A0081BD68 /* Helpers */,
 				73826FA92B20AD4700A26E00 /* Application */,
@@ -246,19 +267,12 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		738548D92B21FA7300A32156 /* Presenter */ = {
-			isa = PBXGroup;
-			children = (
-				73022F322B235C2500972959 /* Presenter.swift */,
-			);
-			path = Presenter;
-			sourceTree = "<group>";
-		};
 		738548DA2B21FA8000A32156 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				73B3EFAB2B35BEB90072627B /* CoreDataModel */,
-				738548DE2B2200DF00A32156 /* ModelManager.swift */,
+				7365DF0F2B67D54F0072FA8C /* NetDataManager.swift */,
+				7365DF0D2B67D53A0072FA8C /* CoreDataManager.swift */,
 				73921E3A2B286DC9005D5D44 /* NetworkingService.swift */,
 				738548DB2B21FB6000A32156 /* Fact.swift */,
 				738E601F2B3D6D1500B4DE56 /* MTUserDefaults.swift */,
@@ -422,16 +436,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				73022F312B23316700972959 /* FactsTableViewCell.swift in Sources */,
-				738548DF2B2200DF00A32156 /* ModelManager.swift in Sources */,
 				73826F7D2B20948200A26E00 /* TabBarController.swift in Sources */,
 				736CDEA52B27490D0037BA84 /* CFABaseButton.swift in Sources */,
 				737D0E892B21C91D0081BD68 /* Resources.swift in Sources */,
 				738548E32B2208A100A32156 /* UIView + Ext.swift in Sources */,
+				7365DF152B67E3390072FA8C /* SettingsViewPresenter.swift in Sources */,
 				738548E12B2206C900A32156 /* NavBarController.swift in Sources */,
+				7365DF102B67D54F0072FA8C /* NetDataManager.swift in Sources */,
 				738548D52B21EB0400A32156 /* SettingsViewController.swift in Sources */,
 				738548DC2B21FB6000A32156 /* Fact.swift in Sources */,
+				7365DF122B67E1D80072FA8C /* FactsViewPresenter.swift in Sources */,
 				737904C32B25E8C7001389C5 /* SingleFactShowingViewController.swift in Sources */,
-				73022F332B235C2600972959 /* Presenter.swift in Sources */,
 				73B3EFAD2B35BED90072627B /* UserFact + Ext.swift in Sources */,
 				738E60202B3D6D1500B4DE56 /* MTUserDefaults.swift in Sources */,
 				738548D32B21E96200A32156 /* FactsViewController.swift in Sources */,
@@ -439,12 +454,13 @@
 				73984C2A2B3C1B210082385E /* SettingsCollectionView.swift in Sources */,
 				73826F792B20948200A26E00 /* AppDelegate.swift in Sources */,
 				73921E3B2B286DC9005D5D44 /* NetworkingService.swift in Sources */,
+				7365DF0E2B67D53A0072FA8C /* CoreDataManager.swift in Sources */,
+				7365DF172B67E70C0072FA8C /* SingleFactViewPresenter.swift in Sources */,
 				73B3EFAF2B35BEEA0072627B /* SavedFact + Ext.swift in Sources */,
 				7398B6722B32D0EA00089EBD /* Model.xcdatamodeld in Sources */,
 				73826F7B2B20948200A26E00 /* SceneDelegate.swift in Sources */,
 				73022F2E2B22F5AD00972959 /* CFABaseController.swift in Sources */,
 				73984C282B3C0C250082385E /* SettingsCollectionViewCell.swift in Sources */,
-				739D6CC82B24C4C600777BD5 /* Builder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

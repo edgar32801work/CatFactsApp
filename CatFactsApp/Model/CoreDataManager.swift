@@ -1,19 +1,19 @@
 //
-//  ModelManager.swift
+//  CoreDataManager.swift
 //  CatFactsApp
 //
-//  Created by Edgar Kuskov on 7.12.23.
+//  Created by Эдгар Кусков on 29.01.24.
 //
 
 import Foundation
 import CoreData
 import UIKit
 
-final class ModelManager {
+
+final class CoreDataManager {
     
-    static let shared = ModelManager(); private init() {}
-    
-    // MARK: - CORE DATA MANAGEMENT
+    static let shared = CoreDataManager()
+    private init() {}
     
     let savedFactId = "SavedFact"
     let userFactId = "UserFact"
@@ -79,41 +79,4 @@ final class ModelManager {
         }
         saveContext()
     }
-    
-    
-    // MARK: - NETWORK MANAGMENT
-    
-    var proposedFacts: [Fact?] = []
-    
-    var areProposedFactsReady: Bool {
-        proposedFacts.count == MTUserDefaults.shared.proposedFactsAmount
-    }
-    
-    func getProposedFact(at index: Int) -> Fact? {
-        return proposedFacts[index]
-    }
-    
-    func insertFact(_ fact: Fact, at index: Int) {
-        proposedFacts[index] = fact
-    }
-    
-    func reserveOnePosInArr() {
-        proposedFacts.append(Fact())
-    }
-        
-    func getFactFromURL(appendArr: Bool) async -> Fact? {
-        do {
-            let data = try await NetworkingService.shared.fetchData()
-            let decoder = JSONDecoder()
-            let factJSON = try decoder.decode(FactJSON.self, from: data)
-            let fact = Fact(factJSON: factJSON, image: nil)
-            return fact
-        } catch {
-            debugPrint(error)
-            debugPrint(error.localizedDescription)
-            return nil
-        }
-    }
-    
-    
 }
