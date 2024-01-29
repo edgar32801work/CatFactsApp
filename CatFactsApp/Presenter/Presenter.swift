@@ -10,11 +10,146 @@ import UIKit
 import CoreData
 
 final class Presenter {
+    
+    
 
     
 }
 
 extension Presenter: FactsViewPresentationDelegate {
+    func updateAndPrepareCell(_ cell: FactsTableViewCell, indexPath: IndexPath) {
+
+        Task {
+            let fact: (title: String?, _: UIImage?)? = await updateRandomFact(forRow: indexPath.row)
+            Task { @MainActor in
+                cell.configure(withTitle: fact?.title)
+            }
+        }  
+    }
+    
+    func prepareVC(_ vc: SingleFactShowingViewController, tableType: FactsTableType, indexPath: IndexPath) {
+        switch tableType {
+        case .proposedFacts:
+            if ModelManager.shared.areProposedFactsReady {
+                let fact = ModelManager.shared.getProposedFact(at: indexPath.row)
+                vc.configure(withText: fact?.factJSON?.fact, image: fact?.image)
+            } else {
+                debugPrint("SingleFactVC preparation error: amount of facts in var proposedFacts isn't correct")
+                vc.configureError()
+            }
+        case .favouritsFacts:
+            switch FactsTableSection(rawValue: indexPath.section) {
+            case .userFacts:
+                let fact: (text: String?, image: UIImage?)? = getUserFact(forRow: indexPath.row)
+                vc.configure(withText: fact?.text, image: fact?.image)
+            case .savedFacts:
+                let fact: (text: String?, image: UIImage?)? = getSavedFact(forRow: indexPath.row)
+                vc.configure(withText: fact?.text, image: fact?.image)
+            default:
+                debugPrint("SingleFactVC preparation error: FactsTableSection get unexpectable rawValue")
+                vc.configureError()
+            }
+        }
+    }
+    
+    
+    enum FactsTableType: Int {
+        case proposedFacts, favouritsFacts
+        
+        mutating func switchValue() {
+            switch self {
+            case .proposedFacts:
+                self = .favouritsFacts
+            case .favouritsFacts:
+                self = .proposedFacts
+            }
+        }
+    }
+    
+    enum FactsTableSection: Int {
+        case userFacts, savedFacts
+    }
+    
+    func getSectionTitleFor(_ tableType: FactsTableType, section: Int) -> String {
+        switch tableType {
+        case .proposedFacts:
+            return Resources.Strings.Facts.Sections.proposedFacts
+        case .favouritsFacts:
+            switch FactsTableSection(rawValue: section) {
+                
+            case .userFacts: 
+                return Resources.Strings.Facts.Sections.userFacts
+                
+            case .savedFacts: 
+                return Resources.Strings.Facts.Sections.savedFacts
+                
+            default: 
+                return Resources.Strings.Facts.Sections.unknownSection
+            }
+        }
+    }
+    
+    func getNumberOfRowsIn(section: Int, forTableType tableType: FactsTableType) -> Int {
+        
+        switch tableType {
+            
+        case .proposedFacts:
+            return getRandomFactsCount()
+        
+        case .favouritsFacts:
+            switch FactsTableSection(rawValue: section) {
+            
+            case .userFacts:
+                return getUserFactsCount()
+            
+            case .savedFacts:
+                return getSavedFactsCount()
+            
+            default:
+                return 0
+            }
+        }
+    }
+
+    func prepareCell(_ cell: FactsTableViewCell, tableType: FactsTableType, indexPath: IndexPath) {
+        
+        switch tableType {
+            
+        case .proposedFacts:
+            if ModelManager.shared.areProposedFactsReady {
+                let fact = ModelManager.shared.getProposedFact(at: indexPath.row)
+                cell.configure(withTitle: fact?.factJSON?.fact)
+            } else {
+                ModelManager.shared.reserveOnePosInArr()
+                Task {
+                    guard let fact = await ModelManager.shared.getFactFromURL(appendArr: true) else { return }
+                    Task { @MainActor in
+                        cell.configure(withTitle: fact.factJSON?.fact)
+                        ModelManager.shared.insertFact(fact, at: indexPath.row)
+                    }
+                }
+            }
+            
+        case .favouritsFacts:
+            guard let section = FactsTableSection(rawValue: indexPath.section) else { return }
+            switch section {
+            case .userFacts:
+                let fact: (title: String?, _: UIImage?)? = getUserFact(forRow: indexPath.row)
+                cell.configure(withTitle: fact?.title)
+            case .savedFacts:
+                let fact: (title: String?, _: UIImage?)? = getSavedFact(forRow: indexPath.row)
+                cell.configure(withTitle: fact?.title)
+            }
+        }
+    }
+    
+    func saveProposedFact(atRow index: Int) {
+        if ModelManager.shared.areProposedFactsReady {
+            let fact = ModelManager.shared.getProposedFact(at: index)
+            saveFact(to: .savedFacts, withText: fact?.factJSON?.fact, image: fact?.image)
+        }
+    }
+    
     
     // MARK: - RANDOM FACTS
         
@@ -83,7 +218,7 @@ extension Presenter: FactsViewPresentationDelegate {
     
     // MARK: - ADDICTION & REMOVING
     
-    func saveFact(to factsType: FactsViewController.FactsTableSection?, withText text: String?, image: UIImage?) {
+    func saveFact(to factsType: FactsTableSection?, withText text: String?, image: UIImage?) {
         switch factsType {
         case .userFacts:
             ModelManager.shared.createFact(factType: .userFact, text: text, image: image)
@@ -93,7 +228,7 @@ extension Presenter: FactsViewPresentationDelegate {
         }
     }
     
-    func removeFact(from factsType: FactsViewController.FactsTableSection?, atRow i: Int) {
+    func removeFact(from factsType: FactsTableSection?, atRow i: Int) {
         switch factsType {
         case .userFacts:
             ModelManager.shared.deleteFact(factType: .userFact, id: i)

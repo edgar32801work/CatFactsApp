@@ -83,7 +83,23 @@ final class ModelManager {
     
     // MARK: - NETWORK MANAGMENT
     
-    var proposedFacts: [Fact] = []
+    var proposedFacts: [Fact?] = []
+    
+    var areProposedFactsReady: Bool {
+        proposedFacts.count == MTUserDefaults.shared.proposedFactsAmount
+    }
+    
+    func getProposedFact(at index: Int) -> Fact? {
+        return proposedFacts[index]
+    }
+    
+    func insertFact(_ fact: Fact, at index: Int) {
+        proposedFacts[index] = fact
+    }
+    
+    func reserveOnePosInArr() {
+        proposedFacts.append(Fact())
+    }
         
     func getFactFromURL(appendArr: Bool) async -> Fact? {
         do {
@@ -91,9 +107,6 @@ final class ModelManager {
             let decoder = JSONDecoder()
             let factJSON = try decoder.decode(FactJSON.self, from: data)
             let fact = Fact(factJSON: factJSON, image: nil)
-            if appendArr {
-                self.proposedFacts.append(fact)                     // TODO: исправить путающиеся return
-            }
             return fact
         } catch {
             debugPrint(error)

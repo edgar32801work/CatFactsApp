@@ -16,6 +16,11 @@ final class FactsTableViewCell: UITableViewCell {
     
     private let label = UILabel()
     private let image = UIImageView()
+    
+    func configureLoading() {
+        configure(withTitle: "LOADING...")
+    }
+    
     func configure(withTitle title: String?) {
         
         configureAppearance()
