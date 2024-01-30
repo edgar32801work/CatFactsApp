@@ -9,9 +9,14 @@
 import UIKit
 import SnapKit
 
+protocol SingleFactViewPresenterProtocol {
+    func updateUserFact(atRow i: Int, withText text: String?, image: UIImage?)
+    func saveFact(to factsType: FactsViewPresenter.FactsTableSection?, withText text: String?, image: UIImage?)
+}
+
 final class SingleFactEditingViewController: CFABaseController {
     
-    private var dataDelegate: FactsViewPresentationDelegate?
+    private var dataDelegate: SingleFactViewPresenter?
     var vcForUpdating: FactsViewController?
     var idForUpdating: Int?
     var addiction: Bool = true
@@ -76,7 +81,7 @@ final class SingleFactEditingViewController: CFABaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dataDelegate = Builder.shared.buildPresenter()
+        dataDelegate = SingleFactViewPresenter()
         
         let scrollViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         scrollView.gestureRecognizers = [scrollViewTapGesture]

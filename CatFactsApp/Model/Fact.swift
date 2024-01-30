@@ -16,6 +16,8 @@ struct Fact {
     var factJSON: FactJSON?
     var image: UIImage?
     
+    init() {}
+    
     init(factJSON: FactJSON, image: UIImage? = nil) {
         self.factJSON = factJSON
         if let image = image {

@@ -27,6 +27,10 @@ final class SingleFactShowingViewController: CFABaseController {
         label.text = text
         imageView.image = image
     }
+    
+    func configureError() {
+        configure(withText: "ERROR")
+    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

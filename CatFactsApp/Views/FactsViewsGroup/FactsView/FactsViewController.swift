@@ -8,44 +8,29 @@
 import UIKit
 import SnapKit
 
-protocol FactsViewPresentationDelegate: AnyObject {
-    func getRandomFactsCount() -> Int
-    func getRandomFact(forRow i: Int) async -> (String?, UIImage?)
-    func updateRandomFact(forRow: Int) async -> (String?, UIImage?)
+protocol FactsViewPresenterProtocol: AnyObject {
+    
+    func getSectionTitleFor(_ tableType: FactsViewPresenter.FactsTableType, section: Int) -> String
+    func getNumberOfRowsIn(section: Int, forTableType: FactsViewPresenter.FactsTableType) -> Int
+    func prepareCell(_ cell: FactsTableViewCell, tableType: FactsViewPresenter.FactsTableType, indexPath: IndexPath)
+    func prepareVC(_ vc: SingleFactShowingViewController, tableType: FactsViewPresenter.FactsTableType, indexPath: IndexPath)
+    func updateAndPrepareCell(_ cell: FactsTableViewCell, indexPath: IndexPath)
+    func saveProposedFact(atRow: Int)
     func updateAllRandomFacts()
     
-    func getUserFactsCount() -> Int
     func getUserFact(forRow i: Int) -> (String?, UIImage?)
-    func updateUserFact(atRow i: Int, withText text: String?, image: UIImage?)
-    
-    func getSavedFactsCount() -> Int
+  
     func getSavedFact(forRow i: Int) -> (String?, UIImage?)
 
-    func saveFact(to factsType: FactsViewController.FactsTableSection?, withText text: String?, image: UIImage?)
-    func removeFact(from factsType: FactsViewController.FactsTableSection?, atRow i: Int)
+    func removeFact(from factsType: FactsViewPresenter.FactsTableSection?, atRow i: Int)
 }
 
 final class FactsViewController: CFABaseController {
     
-    enum FactsTableType: Int {              // TODO: - Пернести в презентер
-        case proposedFacts, favouritsFacts
+    // MARK: - LOCAL PROPERTIES
         
-        mutating func switchValue() {
-            switch self {
-            case .proposedFacts:
-                self = .favouritsFacts
-            case .favouritsFacts:
-                self = .proposedFacts
-            }
-        }
-    }
-    
-    enum FactsTableSection: Int {
-        case userFacts, savedFacts
-    }
-    
-    private var currentFactsTableType: FactsTableType = .proposedFacts
-    private var dataDelegate: FactsViewPresentationDelegate?
+    private var currentFactsTableType: FactsViewPresenter.FactsTableType = .proposedFacts
+    private var dataDelegate: FactsViewPresenter?
     private let segmentedControl = UISegmentedControl()
     private let tableView = UITableView()
     private var swipeDirection: UISwipeGestureRecognizer.Direction {
@@ -56,6 +41,8 @@ final class FactsViewController: CFABaseController {
             return .right
         }
     }
+    
+    // MARK: - LOCAL METHODS
     
     func addNavBarButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showSingleFactAddictionScreen))
@@ -107,7 +94,7 @@ final class FactsViewController: CFABaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dataDelegate = Builder.shared.buildPresenter()
+        dataDelegate = FactsViewPresenter()
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -164,13 +151,12 @@ extension FactsViewController {
 
 }
 
-// MARK: - SECTIONS & CELLS
+// MARK: - SECTIONS & CELLS CONFIGURATION
 
 extension FactsViewController: UITableViewDataSource {
     
     // NUMBER OF SECTIONS
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         switch currentFactsTableType {
         case .proposedFacts:
             return 1
@@ -181,74 +167,26 @@ extension FactsViewController: UITableViewDataSource {
     
     // SECTION TITLE
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
-        switch currentFactsTableType {
-        case .proposedFacts:
-            return Resources.Strings.Facts.Sections.proposedFacts
-        case .favouritsFacts:
-            switch FactsTableSection(rawValue: section) {
-            case .userFacts: return Resources.Strings.Facts.Sections.userFacts
-            case .savedFacts: return Resources.Strings.Facts.Sections.savedFacts
-            default: return Resources.Strings.Facts.Sections.unknownSection
-            }
-        }
-        
+        return dataDelegate?.getSectionTitleFor(currentFactsTableType, section: section)
     }
     
     // NUMBER OF ROWS IN SECTION
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        switch currentFactsTableType {
-        case .proposedFacts:
-            let numberOfProposedFacts = dataDelegate?.getRandomFactsCount() ?? 0
-            return numberOfProposedFacts
-        case .favouritsFacts:
-            switch FactsTableSection(rawValue: section) {
-            case .userFacts:
-                let numberOfUserFacts: Int = dataDelegate?.getUserFactsCount() ?? 0
-                return numberOfUserFacts
-            case .savedFacts:
-                let numberOfSavedFacts: Int = dataDelegate?.getSavedFactsCount() ?? 0
-                return numberOfSavedFacts
-            default:
-                return 0
-            }
-        }
-        
+        return dataDelegate?.getNumberOfRowsIn(section: section, forTableType: currentFactsTableType) ?? 0        
     }
     
     // CELL FOR ROW
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FactsTableViewCell.id, for: indexPath) as? FactsTableViewCell else { return UITableViewCell() }
-//        cell.separatorInset = .init(top: 0, left: .greatestFiniteMagnitude, bottom: 0, right: 0)            // TODO: разобраться поддробнее
+        //cell.separatorInset = .init(top: 0, left: .greatestFiniteMagnitude, bottom: 0, right: 0)            // TODO: разобраться поддробнее
         cell.layoutMargins = UIEdgeInsets.zero
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsets.zero
         
-        switch currentFactsTableType {
-        case .proposedFacts:
-            Task {
-                let fact: (title: String?, _: UIImage?)? = await dataDelegate?.getRandomFact(forRow: indexPath.row)
-                cell.configure(withTitle: fact?.title)
-            }
-            return cell
-        case .favouritsFacts:
-            switch FactsTableSection(rawValue: indexPath.section) {
-            case .userFacts:
-                let fact: (title: String?, _: UIImage?)? = dataDelegate?.getUserFact(forRow: indexPath.row)
-                cell.configure(withTitle: fact?.title)
-                return cell
-            case .savedFacts:
-                let fact: (title: String?, _: UIImage?)? = dataDelegate?.getSavedFact(forRow: indexPath.row)
-                cell.configure(withTitle: fact?.title)
-                return cell
-            default:
-                cell.configure(withTitle: Resources.Strings.Facts.unknownTitle)
-                return cell
-            }
-        }
+        cell.configure(state: .loading)
+        dataDelegate?.prepareCell(cell, tableType: currentFactsTableType, indexPath: indexPath)
         
-        
+        return cell
     }
 }
 
@@ -257,46 +195,24 @@ extension FactsViewController: UITableViewDelegate {
     
     // DID SELECT ROW AT
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         tableView.deselectRow(at: indexPath, animated: true)
-        switch currentFactsTableType {
-        case .proposedFacts:
-            Task {
-                let destinationVC = SingleFactShowingViewController()
-                let fact: (text: String?, image: UIImage?)? = await dataDelegate?.getRandomFact(forRow: indexPath.row)
-                destinationVC.configure(withText: fact?.text, image: fact?.image)
-                navigationController?.showDetailViewController(destinationVC, sender: self)
-            }
-        case .favouritsFacts:
-            switch FactsTableSection(rawValue: indexPath.section) {
-            case .userFacts:
-                let destinationVC = SingleFactShowingViewController()
-                let fact: (text: String?, image: UIImage?)? = dataDelegate?.getUserFact(forRow: indexPath.row)
-                destinationVC.configure(withText: fact?.text, image: fact?.image)
-                navigationController?.showDetailViewController(destinationVC, sender: self)
-            case .savedFacts:
-                let destinationVC = SingleFactShowingViewController()
-                let fact: (text: String?, image: UIImage?)? = dataDelegate?.getSavedFact(forRow: indexPath.row)
-                destinationVC.configure(withText: fact?.text, image: fact?.image)
-                navigationController?.showDetailViewController(destinationVC, sender: self)
-            default:
-                let destinationVC = SingleFactShowingViewController()
-                destinationVC.configure(withText: Resources.Strings.Facts.unknownTitle)
-                navigationController?.showDetailViewController(destinationVC, sender: self)
-            }
-        }
+        let destinationVC = SingleFactShowingViewController()
+        navigationController?.showDetailViewController(destinationVC, sender: self)
+        dataDelegate?.prepareVC(destinationVC, tableType: currentFactsTableType, indexPath: indexPath)
     }
     
     // TRAILING SWIPE
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
+
         switch currentFactsTableType {
         
         case .proposedFacts:
-            let uploadedAction = UIContextualAction(style: .normal, title: "") { action, sourceView, completionHandler in
+            let uploadedAction = UIContextualAction(style: .normal, title: "") { [weak self] action, sourceView, completionHandler in
                 if let cell = tableView.cellForRow(at: indexPath) as? FactsTableViewCell {
-                    Task {
-                        let fact: (title: String?, _: UIImage?)? = await self.dataDelegate?.updateRandomFact(forRow: indexPath.row)
-                        cell.configure(withTitle: fact?.title)
+                    cell.configure(state: .loading)
+                    if let self {
+                        dataDelegate?.updateAndPrepareCell(cell, indexPath: indexPath)
                     }
                 }
                 completionHandler(true)
@@ -316,7 +232,8 @@ extension FactsViewController: UITableViewDelegate {
                 alert.addAction(UIAlertAction(title: Resources.Strings.Facts.DeletingAlert.deleteAction,
                                               style: .destructive,
                                               handler: { [weak self] _ in
-                    self?.dataDelegate?.removeFact(from: FactsTableSection(rawValue: indexPath.section), atRow: indexPath.row)
+                    let section = FactsViewPresenter.FactsTableSection(rawValue: indexPath.section)
+                    self?.dataDelegate?.removeFact(from: section, atRow: indexPath.row)
                     self?.updateFactsTable()
                 }))
                 
@@ -341,10 +258,9 @@ extension FactsViewController: UITableViewDelegate {
         switch currentFactsTableType {
             
         case .proposedFacts:
-            let uploadedAction = UIContextualAction(style: .normal, title: "") { action, sourceView, completionHandler in
-                Task {
-                    let fact: (text: String?, image: UIImage?)? = await self.dataDelegate?.getRandomFact(forRow: indexPath.row)
-                    self.dataDelegate?.saveFact(to: .savedFacts, withText: fact?.text, image: fact?.image)
+            let uploadedAction = UIContextualAction(style: .normal, title: "") { [weak self] action, sourceView, completionHandler in
+                if let self {
+                    self.dataDelegate?.saveProposedFact(atRow: indexPath.row)
                 }
                 completionHandler(true)
             }
@@ -354,7 +270,7 @@ extension FactsViewController: UITableViewDelegate {
             return swipeConfiguration
             
         case .favouritsFacts:
-            switch FactsTableSection(rawValue: indexPath.section) {
+            switch FactsViewPresenter.FactsTableSection(rawValue: indexPath.section) {
                 
             case .userFacts:
                 let uploadedAction = UIContextualAction(style: .normal, title: "") { action, sourceView, completionHandler in
