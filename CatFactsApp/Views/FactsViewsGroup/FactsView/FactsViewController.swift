@@ -183,7 +183,7 @@ extension FactsViewController: UITableViewDataSource {
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsets.zero
         
-        cell.configureLoading()
+        cell.configure(state: .loading)
         dataDelegate?.prepareCell(cell, tableType: currentFactsTableType, indexPath: indexPath)
         
         return cell
@@ -210,7 +210,7 @@ extension FactsViewController: UITableViewDelegate {
         case .proposedFacts:
             let uploadedAction = UIContextualAction(style: .normal, title: "") { [weak self] action, sourceView, completionHandler in
                 if let cell = tableView.cellForRow(at: indexPath) as? FactsTableViewCell {
-                    cell.configureLoading()
+                    cell.configure(state: .loading)
                     if let self {
                         dataDelegate?.updateAndPrepareCell(cell, indexPath: indexPath)
                     }

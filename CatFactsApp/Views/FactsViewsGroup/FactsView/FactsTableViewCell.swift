@@ -10,22 +10,31 @@
 import UIKit
 import SnapKit
 
+protocol FactsTableViewCellPresenterProtocol {
+    
+}
+
 final class FactsTableViewCell: UITableViewCell {
     
     static let id = "FactsTableViewCell"
     
     private let label = UILabel()
     private let image = UIImageView()
+    private let activityIndicator = UIActivityIndicatorView()
     
-    func configureLoading() {
-        configure(withTitle: "LOADING...")
-    }
-    
-    func configure(withTitle title: String?) {
+    func configure(withTitle title: String? = nil, state: FactsTableViewCellPresenter.CellLoadingType = .normal) {
         
         configureAppearance()
-        addSubviews()
-        constraintViews()
+        addSubviews(forState: state)
+        constraintViews(forState: state)
+        
+        switch state {
+            
+        case .normal:
+            activityIndicator.stopAnimating()	
+        case .loading:
+            activityIndicator.startAnimating()
+        }
         
         label.text = title
         
@@ -46,22 +55,36 @@ extension FactsTableViewCell {
         image.tintColor = Resources.Colors.tintColor
     }
     
-    func addSubviews() {
-        setupSubviews(label)
-        setupSubviews(image)
+    func addSubviews(forState state: FactsTableViewCellPresenter.CellLoadingType) {
+        switch state {
+            
+        case .normal:
+            setupSubviews(label)
+            setupSubviews(image)
+        case .loading:
+            setupSubviews(activityIndicator)
+        }
     }
     
-    func constraintViews() {
+    func constraintViews(forState state: FactsTableViewCellPresenter.CellLoadingType) {
         
-        label.snp.makeConstraints { make in
-            make.centerY.equalTo(snp.centerY)
-            make.leading.equalTo(snp.leading).offset(Resources.designValue)
-            make.width.equalTo(snp.width).multipliedBy(0.7)
-        }
-        
-        image.snp.makeConstraints { make in
-            make.centerY.equalTo(label.snp.centerY)
-            make.trailing.equalTo(snp.trailing).offset(-Resources.designValue)
+        switch state {
+            
+        case .normal:
+            label.snp.makeConstraints { make in
+                make.centerY.equalTo(snp.centerY)
+                make.leading.equalTo(snp.leading).offset(Resources.designValue)
+                make.width.equalTo(snp.width).multipliedBy(0.7)
+            }
+            
+            image.snp.makeConstraints { make in
+                make.centerY.equalTo(label.snp.centerY)
+                make.trailing.equalTo(snp.trailing).offset(-Resources.designValue)
+            }
+        case .loading:
+            activityIndicator.snp.makeConstraints { make in
+                make.center.equalToSuperview()
+            }
         }
     }
 }

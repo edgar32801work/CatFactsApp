@@ -15,6 +15,7 @@
 		7365DF122B67E1D80072FA8C /* FactsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF112B67E1D80072FA8C /* FactsViewPresenter.swift */; };
 		7365DF152B67E3390072FA8C /* SettingsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF142B67E3390072FA8C /* SettingsViewPresenter.swift */; };
 		7365DF172B67E70C0072FA8C /* SingleFactViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF162B67E70C0072FA8C /* SingleFactViewPresenter.swift */; };
+		7365DF1B2B67EC230072FA8C /* FactsTableViewCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7365DF1A2B67EC230072FA8C /* FactsTableViewCellPresenter.swift */; };
 		736CDEA32B26F13B0037BA84 /* SingleFactEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736CDEA22B26F13B0037BA84 /* SingleFactEditingViewController.swift */; };
 		736CDEA52B27490D0037BA84 /* CFABaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736CDEA42B27490D0037BA84 /* CFABaseButton.swift */; };
 		737904C32B25E8C7001389C5 /* SingleFactShowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737904C22B25E8C7001389C5 /* SingleFactShowingViewController.swift */; };
@@ -66,6 +67,7 @@
 		7365DF112B67E1D80072FA8C /* FactsViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactsViewPresenter.swift; sourceTree = "<group>"; };
 		7365DF142B67E3390072FA8C /* SettingsViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewPresenter.swift; sourceTree = "<group>"; };
 		7365DF162B67E70C0072FA8C /* SingleFactViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFactViewPresenter.swift; sourceTree = "<group>"; };
+		7365DF1A2B67EC230072FA8C /* FactsTableViewCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactsTableViewCellPresenter.swift; sourceTree = "<group>"; };
 		736CDEA22B26F13B0037BA84 /* SingleFactEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFactEditingViewController.swift; sourceTree = "<group>"; };
 		736CDEA42B27490D0037BA84 /* CFABaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFABaseButton.swift; sourceTree = "<group>"; };
 		737904C22B25E8C7001389C5 /* SingleFactShowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFactShowingViewController.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				7365DF112B67E1D80072FA8C /* FactsViewPresenter.swift */,
 				738548D22B21E96200A32156 /* FactsViewController.swift */,
 				73022F302B23316700972959 /* FactsTableViewCell.swift */,
+				7365DF1A2B67EC230072FA8C /* FactsTableViewCellPresenter.swift */,
 			);
 			path = FactsView;
 			sourceTree = "<group>";
@@ -441,6 +444,7 @@
 				737D0E892B21C91D0081BD68 /* Resources.swift in Sources */,
 				738548E32B2208A100A32156 /* UIView + Ext.swift in Sources */,
 				7365DF152B67E3390072FA8C /* SettingsViewPresenter.swift in Sources */,
+				7365DF1B2B67EC230072FA8C /* FactsTableViewCellPresenter.swift in Sources */,
 				738548E12B2206C900A32156 /* NavBarController.swift in Sources */,
 				7365DF102B67D54F0072FA8C /* NetDataManager.swift in Sources */,
 				738548D52B21EB0400A32156 /* SettingsViewController.swift in Sources */,
